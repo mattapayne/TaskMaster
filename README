@@ -408,7 +408,7 @@ TaskMaster.create_tasks do
       end 
       monthly_schedule do
         months :october, :november
-        days_in_month 5, 10, 15, 25, 30
+        days_of_month 5, 10, 15, 25, 30
       end
     end
     
