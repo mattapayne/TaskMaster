@@ -1,0 +1,462 @@
+TaskMaster is a Ruby DSL for generating Windows Task Scheduler tasks as XML
+
+** Note that only Windows Vista and Server 2008 support creating scheduled tasks from XML **
+
+Examples:
+=========
+
+require 'task_master'
+
+TaskMaster.create_tasks do
+  
+  #send an email when an event occurrs
+  task do
+    name "sendemailonevent"
+    description "Sends an email when an event occurs"
+    version "2.0"
+    author "Matt Payne"
+    date Date.today - 3
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    event_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      execution_time_limit 5.minutes
+      subscription %{<QueryList><Query Id='1'><Select Path='System'>*[System/Level=2]</Select></Query></QueryList>}
+    end
+    
+    email_action do
+      server "EmailServerName"
+      subject "A Subject"
+      to "recipient@test.ca"
+      from "sender@test.ca"
+      body "This is the email body"
+      attachment do
+        file "C:\\temp\\attachment.txt"
+      end
+    end
+    
+  end
+  
+  #start an executable when system boots
+  task do
+    name "startexeonboot"
+    description "Starts an executable when the system has booted"
+    version "2.0"
+    author "Matt Payne"
+    date Date.today - 3
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+    boot_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      enabled true
+      execution_time_limit 5.minutes
+    end
+    
+  end
+  
+  #start an executable weekly
+  task do
+    name "startexeweekly"
+    description "Starts an executable weekly"
+    version "2.0"
+    author "Matt Payne"
+    date Date.today - 3
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      weekly_schedule do
+        interval 2
+        days "Monday"
+      end
+    end
+    
+  end
+  
+  #start an executable when task registered
+  task do
+    name "startexewhentaskregistered"
+    description "Starts an executable when the task is registered"
+    version "2.0"
+    author "Matt Payne"
+    date Date.today - 3
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+    registration_trigger do
+      
+    end
+    
+  end
+  
+  #start an executable daily
+  task do
+    name "startexedaily"
+    description "Starts an executable daily"
+    version "2.0"
+    author "Matt Payne"
+    date Date.today - 3
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      repetition do
+        interval 1.minute
+        duration 4.minutes
+      end
+      daily_schedule do
+        interval 1
+      end
+    end
+    
+  end
+  
+  #start an executable at a specific time
+  task do
+    name "startexeattime"
+    description "Starts an executable at a specified time"
+    version "1.0"
+    author "Matt Payne"
+    date Date.new(2009, 6, 11)
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+    time_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      execution_time_limit 5.minutes
+    end
+    
+  end
+  
+  #Task to start notepad on logon
+  task do
+    name "startnotepadatlogon"
+    description "Starts Notepad when user logs on"
+    version "1.0"
+    author "Matt Payne"
+    
+    principal do
+      userid "Administrator"
+    end
+    
+    logon_trigger do
+      userid "Administrator"
+    end
+    
+    exec_action do
+      command "notepad.exe"
+    end
+    
+  end
+  
+  #Task showing messagebox when event occurs
+  task do
+    name "messageboxevent"
+    description "Task shows a messagebox when an event occurrs."
+    version "1.0.0"
+    author "Matt Payne"
+    
+    principal do
+      userid "Administrator"
+      logon_type "InteractiveToken"
+    end
+    
+    settings do
+      enabled true
+      allow_start_on_demand true
+      allow_hard_terminate true
+    end
+    
+    show_message_action do
+      title "Message Box Title"
+      body "A level 4 event occurred: $(eventID)"
+    end
+    
+    event_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      execution_time_limit 5.minutes
+      subscription %{<QueryList><Query Id='1'><Select Path='System'>*[System/Level=4]</Select></Query></QueryList>}
+      value_query do
+        name "eventID"
+        value "Event/System/EventRecordID"
+      end
+    end
+  end
+  
+  #Task showing every option
+  task do
+    
+    name "mytask"
+    description "A Task"
+    date DateTime.now
+    author "me"
+    version "1.0"
+    source "http:test.ca"
+    uri "http://test.ca"
+    security_descriptor "monkey"
+    documentation "this is some docs"
+    data "This is some task data."
+  
+    settings do
+      
+      run_only_if_idle true
+      hidden true
+      allow_start_on_demand true
+      allow_hard_terminate true
+      delete_expired_task_after 1.minutes
+      disallow_start_if_on_batteries true
+      enabled true
+      execution_time_limit 20
+      run_only_if_idle false
+      run_only_if_network_available false
+      start_when_available true
+      stop_if_going_on_batteries true
+      wake_to_run false
+      multiple_instances_policy "Parallel"
+      priority 7
+      network_profile_name "Some Network Profile"
+      
+      idle_settings do
+        wait_timeout = 5.minutes
+        duration = 3.minutes
+        terminate_on_idle_end = true
+        restart_on_idle = true
+      end
+      
+      network_settings do
+        id 10
+        name "Network settings name"
+        run_only_if_network_available true
+        priority 10
+        wake_to_run true
+      end
+
+      restart_on_failure do
+        count 10
+        interval 20
+      end
+      
+    end
+  
+    email_action do
+      server "mail.domain.com"
+      subject "A Subject"
+      to "joe@test.ca"
+      from "matt@test.ca"
+      header_field do
+        name "A Field Name"
+        value "A Field Value"
+      end
+      body "hi, how are you?"
+      attachment do
+        file "test.txt"
+      end
+    end
+  
+    show_message_action do
+      id 1001
+      title "This is a message title"
+      body "This is a message body"
+    end
+  
+    com_action do
+      class_id "3F2504E0-4F89-11D3-9A0C-0305E82C3301"
+      data "some data"
+    end
+  
+    #action with no args defaults to an exec_action
+    action do
+      command "notepad.exe"
+      arguments "somefile.txt"
+      working_directory "."
+    end
+    
+    #action with no args defaults to an exec_action
+    action do
+      command "ruby myfile.rb"
+    end
+  
+    time_trigger do
+      random_delay 10.minutes
+      enabled true
+      repetition do
+        duration 1.hours
+        interval 14
+        stop_at_duration_end true
+      end
+    end
+  
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      random_delay 10.minutes
+      daily_schedule do
+        interval 365
+      end
+    end
+    
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      enabled true
+      weekly_schedule do
+        interval 5
+        days :wednesday, :thursday
+      end
+    end
+    
+    calendar_trigger do
+      enabled false
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      repetition do
+        duration 2.hours
+        interval 22
+        stop_at_duration_end true
+      end 
+      monthly_schedule do
+        months :october, :november
+        days 5, 10, 15, 25, 30
+      end
+    end
+    
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      month_day_of_week_schedule do
+        weeks 1, 2
+        days "Monday", "Wednesday", "Friday"
+        months "February", "July"
+      end
+    end
+    
+    calendar_trigger do
+      start_boundary DateTime.new(2009, 6, 11, 12, 30)
+      end_boundary DateTime.new(2010, 6, 11, 12, 30)
+      weekly_schedule do
+        interval 4
+        days :monday
+      end
+    end
+  
+    event_trigger do
+      delay 5.minutes
+      subscription "//some path query"
+    end
+  
+    boot_trigger do
+      delay 15.minutes + 30.seconds
+    end
+  
+    registration_trigger do
+      delay 1.hour + 2.minutes + 55.seconds
+    end
+  
+    idle_trigger do
+    
+    end
+  
+    logon_trigger do
+      userid 1
+      delay 1.month + 2.days + 2.hours
+    end
+  
+    session_state_change_trigger do
+      userid 1
+      delay 20.minutes
+      state_change "ConsoleConnect"
+    end
+  
+    principal do
+      groupid 1
+      userid 2
+      logon_type "Password"
+    end
+  end
+end
+
+WinSched.to_xml(File.join(File.dirname(__FILE__), "output"))
