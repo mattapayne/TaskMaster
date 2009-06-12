@@ -91,7 +91,7 @@ module TaskMaster
         @days = []
       end
       
-      def days_in_month(*day_numbers)
+      def days_of_month(*day_numbers)
         day_numbers.each do |day|
           unless day.to_i >= CalendarHelper::MIN_DAYS_IN_MONTH && 
             day.to_i <= CalendarHelper::MAX_DAYS_IN_MONTH
