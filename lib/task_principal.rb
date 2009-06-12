@@ -1,8 +1,6 @@
 module TaskMaster
   class TaskPrincipal
     
-    LOGON_TYPES = ["S4U", "Password", "InteractiveToken"].freeze
-    
     def display_name(name)
       @display_name = name
     end
@@ -12,10 +10,7 @@ module TaskMaster
     end
     
     def logon_type(type)
-      unless LOGON_TYPES.include?(type.to_s)
-        raise "Invalid logon type: #{type}. Must be one of #{LOGON_TYPES.to_sentence}"
-      end
-      @logon_type = type.to_s
+      @logon_type = LogonType.new(type)
     end
     
     def userid(id)

@@ -9,12 +9,13 @@ TODO:
 1) Finish specs
 2) Create executables to automatically create the task(s) when running on Windows
 3) Add Rails integration support
-4) The interface needs a bit more polish
 
 Examples:
 =========
 
 require 'task_master'
+
+require 'lib/task_master'
 
 TaskMaster.create_tasks do
   
@@ -28,7 +29,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -67,7 +68,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -99,7 +100,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -133,7 +134,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -162,7 +163,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -199,7 +200,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -250,7 +251,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type "InteractiveToken"
+      logon_type LogonType.interactive_token
     end
     
     settings do
@@ -299,14 +300,14 @@ TaskMaster.create_tasks do
       delete_expired_task_after 1.minutes
       disallow_start_if_on_batteries true
       enabled true
-      execution_time_limit 20.minutes
+      execution_time_limit 20
       run_only_if_idle false
       run_only_if_network_available false
       start_when_available true
       stop_if_going_on_batteries true
       wake_to_run false
-      multiple_instances_policy "Parallel"
-      priority 7
+      multiple_instances_policy MultipleInstancesPolicy.parallel
+      priority Priority.normal
       network_profile_name "Some Network Profile"
       
       idle_settings do
@@ -320,13 +321,13 @@ TaskMaster.create_tasks do
         id 10
         name "Network settings name"
         run_only_if_network_available true
-        priority 10
+        priority Priority.high
         wake_to_run true
       end
 
       restart_on_failure do
         count 10
-        interval 20
+        interval 20.seconds
       end
       
     end
@@ -373,8 +374,8 @@ TaskMaster.create_tasks do
       random_delay 10.minutes
       enabled true
       repetition do
-        duration 1.hours
-        interval 14
+        duration 1.hour
+        interval 14.minutes
         stop_at_duration_end true
       end
     end
@@ -404,7 +405,7 @@ TaskMaster.create_tasks do
       end_boundary DateTime.new(2010, 6, 11, 12, 30)
       repetition do
         duration 2.hours
-        interval 22
+        interval 22.minutes
         stop_at_duration_end true
       end 
       monthly_schedule do
@@ -457,16 +458,16 @@ TaskMaster.create_tasks do
     session_state_change_trigger do
       userid 1
       delay 20.minutes
-      state_change "ConsoleConnect"
+      state_change StateChange.console_connect
     end
   
     principal do
       groupid 1
       userid 2
-      logon_type "Password"
+      logon_type LogonType.password
     end
   end
 end
 
-#Write all tasks as XML to the specified directory
+#Write each task as a separate file to the specified output directory
 TaskMaster.to_xml(File.join(File.dirname(__FILE__), "output"))

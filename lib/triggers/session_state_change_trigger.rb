@@ -1,9 +1,6 @@
 module TaskMaster
   class SessionStateChangeTrigger < Trigger 
     
-    STATE_CHANGES = ["ConsoleConnect", "ConsoleDisconnect", "RemoteConnect", "RemoteDisconect", 
-     "SessionLock", "SessionUnlock"].freeze
-    
     def userid(id)
       @userid = id
     end
@@ -13,10 +10,7 @@ module TaskMaster
     end
     
     def state_change(change)
-      unless STATE_CHANGES.include?(change.to_sym)
-        raise "Invalid session state change specified: #{change}. Must be one of #{STATE_CHANGES.to_sentence}"
-      end
-      @change = change
+      @change = StateChange.new(change) 
     end
     
     def valid?
@@ -29,7 +23,7 @@ module TaskMaster
         super(builder)
         builder.UserId @userid if @userid
         builder.Delay @delay.to_s if @delay
-        builder.StateChange STATE_CHANGES[@change.to_sym]
+        builder.StateChange @change.to_s if @change
       end
     end
   end

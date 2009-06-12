@@ -1,9 +1,6 @@
 module TaskMaster
   class BaseSettings
     
-    MULTIPLE_INSTANCES_POLICIES = ["Parallel", "Queue", "IgnoreNew", "StopExisting"].freeze
-    PRIORITY_VALUES = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"].freeze
-    
     def network_profile_name(name)
       @network_profile_name = name
     end
@@ -20,17 +17,11 @@ module TaskMaster
     end
     
     def priority(priority_value)
-      if priority_value.blank? || !PRIORITY_VALUES.include?(priority_value.to_s)
-        raise ArgumentError.new("Invalid priority: #{priority_value}. Must be one of #{PRIORITY_VALUES.to_sentence}")
-      end
-      @priority = priority_value.to_s
+      @priority = Priority.new(priority_value)
     end
     
     def multiple_instances_policy(policy_name)
-      if policy_name.blank? || !MULTIPLE_INSTANCES_POLICIES.include?(policy_name.to_s)
-        raise ArgumentError.new("Invalid multiple instances policy: #{policy_name}. Must be one of #{MULTIPLE_INSTANCES_POLICIES.to_sentence}")
-      end
-      @multiple_instances_policy = policy_name.to_s
+      @multiple_instances_policy = MultipleInstancesPolicy.new(policy_name)
     end
     
     def network_settings(&block)
@@ -110,12 +101,12 @@ module TaskMaster
       if @idle_settings
         @idle_settings.to_xml(builder)
       end
-      builder.MultipleInstancesPolicy @multiple_instances_policy if @multiple_instances_policy
+      builder.MultipleInstancesPolicy @multiple_instances_policy.to_s if @multiple_instances_policy
       builder.NetworkProfileName @network_profile_name if @network_profile_name
       if @network_settings
         @network_settings.to_xml(builder)
       end
-      builder.Priority @priority if @priority
+      builder.Priority @priority.to_s if @priority
       if @restart_on_failure_settings
         @restart_on_failure_settings.to_xml(builder)
       end

@@ -2,12 +2,13 @@ require 'rubygems'
 require 'builder'
 require 'active_support'
 local_path = File.expand_path(File.dirname(__FILE__))
-['utility/duration', 'utility/date_helpers', 'idle_settings', 'base_settings', 'task_settings', 'network_settings', 'repetition',
-  'restart_on_failure_settings', 'task_principal', 'actions/action', 'actions/com_action', 'actions/exec_action', 
-  'actions/email_action', 'actions/show_message_action', 'utility/calendar_helper','triggers/trigger',
-  'triggers/boot_trigger', 'triggers/calendar_trigger', 'triggers/event_trigger', 'triggers/idle_trigger',
-  'triggers/logon_trigger', 'triggers/registration_trigger', 'triggers/session_state_change_trigger',
-  'triggers/time_trigger', 'task'].each do |f|
+['utility/duration', 'utility/date_helpers', 'idle_settings', 'base_settings', 'task_settings', 
+  'network_settings', 'repetition','restart_on_failure_settings', 'multiple_instances_policy', 
+  'priority', 'logon_type', 'state_change', 'task_principal', 'actions/action', 'actions/com_action', 
+  'actions/exec_action', 'actions/email_action', 'actions/show_message_action', 'utility/calendar_helper',
+  'triggers/trigger','triggers/boot_trigger', 'triggers/calendar_trigger', 'triggers/event_trigger', 
+  'triggers/idle_trigger','triggers/logon_trigger', 'triggers/registration_trigger', 
+  'triggers/session_state_change_trigger','triggers/time_trigger', 'task'].each do |f|
     require File.join(local_path, f)
   end
 
