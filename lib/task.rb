@@ -134,19 +134,17 @@ module TaskMaster
     end
     
     def trigger(type, &block)
-      if block_given?
-        unless @triggers.size >= MAX_TRIGGERS
-          trigger = Trigger.get(type)
+      unless @triggers.size >= MAX_TRIGGERS
+        trigger = Trigger.get(type)
+        if block_given?
           trigger.instance_eval(&block)
-          unless trigger.valid?
-            raise "Invalid trigger"
-          end
-          @triggers << trigger
-        else
-          raise "You may only have a maximum of #{MAX_TRIGGERS} triggers."
         end
+        unless trigger.valid?
+          raise "Invalid trigger"
+        end
+        @triggers << trigger
       else
-        raise "You must supply a block to configure the trigger."
+        raise "You may only have a maximum of #{MAX_TRIGGERS} triggers."
       end
     end
     

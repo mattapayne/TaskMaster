@@ -13,8 +13,6 @@ TODO:
 Examples:
 =========
 
-require 'task_master'
-
 TaskMaster.create_tasks do
   
   #send an email when an event occurrs
@@ -145,9 +143,7 @@ TaskMaster.create_tasks do
       command "notepad.exe"
     end
     
-    registration_trigger do
-      
-    end
+    registration_trigger
     
   end
   
@@ -443,10 +439,12 @@ TaskMaster.create_tasks do
     registration_trigger do
       delay 1.hour + 2.minutes + 55.seconds
     end
-  
-    idle_trigger do
     
-    end
+    #no configuration necessary
+    idle_trigger
+    
+    #no configuration necessary
+    registration_trigger
   
     logon_trigger do
       userid 1
