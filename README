@@ -15,8 +15,6 @@ Examples:
 
 require 'task_master'
 
-require 'lib/task_master'
-
 TaskMaster.create_tasks do
   
   #send an email when an event occurrs
