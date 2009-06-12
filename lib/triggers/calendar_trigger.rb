@@ -49,7 +49,7 @@ module TaskMaster
     end
     
     class ScheduleByWeek
-      include CalendarHelper
+      include CalendarHelper, CalendarHelper::Days
       
       def initialize
         @days = []
@@ -62,15 +62,6 @@ module TaskMaster
          else
            raise "Invalid week interval: #{interval}. Must be between #{CalendarHelper::MIN_WEEKS_IN_YEAR} and #{CalendarHelper::MAX_WEEKS_IN_YEAR}"
          end
-      end
-      
-      def days(*sched_days)
-        sched_days.each do |day|
-          unless CalendarHelper::DAYS_OF_WEEK.include?(day.to_s.downcase.capitalize)
-            raise "Invalid day of the week: #{day}. It must be one of #{CalendarHelper::DAYS_OF_WEEK.to_sentence}"
-          end
-          @days << day.to_s.downcase.capitalize
-        end
       end
       
       def to_xml(builder)
@@ -93,23 +84,14 @@ module TaskMaster
     end
     
     class ScheduleByMonth
-      include CalendarHelper
+      include CalendarHelper, CalendarHelper::Months
       
       def initialize
         @months = []
         @days = []
       end
       
-      def months(*month_names)
-        month_names.each do |month|
-          unless CalendarHelper::MONTHS.include?(month.to_s.downcase.capitalize)
-            raise "Invalid month name: #{month}. It must be one of #{CalendarHelper::MONTHS.to_sentence}"
-          end
-          @months << month.to_s.downcase.capitalize
-        end
-      end
-      
-      def days(*day_numbers)
+      def days_in_month(*day_numbers)
         day_numbers.each do |day|
           unless day.to_i >= CalendarHelper::MIN_DAYS_IN_MONTH && 
             day.to_i <= CalendarHelper::MAX_DAYS_IN_MONTH
@@ -147,21 +129,12 @@ module TaskMaster
     end
     
     class ScheduleByMonthDayOfWeek
-      include CalendarHelper
+      include CalendarHelper, CalendarHelper::Months, CalendarHelper::Days
       
       def initialize
         @months = []
         @weeks = []
         @days = []
-      end
-      
-      def months(*month_names)
-        month_names.each do |month|
-          unless CalendarHelper::MONTHS.include?(month.to_s.downcase.capitalize)
-            raise "Invalid month: #{month}. It must be one of #{CalendarHelper::MONTHS.to_sentence}"
-          end
-          @months << month.to_s.downcase.capitalize
-        end
       end
       
       def weeks(*week_numbers)
@@ -171,15 +144,6 @@ module TaskMaster
             raise "Invalid week number. Must be between #{CalendarHelper::MIN_WEEKS_IN_YEAR} and #{CalendarHelper::MAX_WEEKS_IN_YEAR}"
           end
           @weeks << week.to_i
-        end
-      end
-      
-      def days(*day_names)
-        day_names.each do |day|
-          unless CalendarHelper::DAYS_OF_WEEK.include?(day.to_s.downcase.capitalize)
-            raise "Invalid day name: #{day}. It must be one of: #{CalendarHelper::DAYS_OF_WEEK.to_sentence}"
-          end
-          @days << day.to_s.downcase.capitalize
         end
       end
       

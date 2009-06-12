@@ -20,7 +20,7 @@ module TaskMaster
     def self.valid_priority?(priority)
       return false if priority.blank?
       PRIORITIES.each do |range|
-        range.include?(priority.to_i)
+        return true if range.include?(priority.to_i)
       end
       return false
     end

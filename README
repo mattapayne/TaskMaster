@@ -27,7 +27,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -66,7 +66,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -98,7 +98,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -116,7 +116,7 @@ TaskMaster.create_tasks do
       end_boundary DateTime.new(2010, 6, 11, 12, 30)
       weekly_schedule do
         interval 2
-        days "Monday"
+        days_of_week "Monday"
       end
     end
     
@@ -132,7 +132,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -161,7 +161,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -198,7 +198,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -249,7 +249,7 @@ TaskMaster.create_tasks do
     
     principal do
       userid "Administrator"
-      logon_type LogonType.interactive_token
+      logon_type TaskMaster::LogonType.interactive_token
     end
     
     settings do
@@ -304,8 +304,8 @@ TaskMaster.create_tasks do
       start_when_available true
       stop_if_going_on_batteries true
       wake_to_run false
-      multiple_instances_policy MultipleInstancesPolicy.parallel
-      priority Priority.normal
+      multiple_instances_policy TaskMaster:: MultipleInstancesPolicy.parallel
+      priority TaskMaster::Priority.normal
       network_profile_name "Some Network Profile"
       
       idle_settings do
@@ -319,7 +319,7 @@ TaskMaster.create_tasks do
         id 10
         name "Network settings name"
         run_only_if_network_available true
-        priority Priority.high
+        priority TaskMaster::Priority.high
         wake_to_run true
       end
 
@@ -393,7 +393,7 @@ TaskMaster.create_tasks do
       enabled true
       weekly_schedule do
         interval 5
-        days :wednesday, :thursday
+        days_of_week :wednesday, :thursday
       end
     end
     
@@ -408,7 +408,7 @@ TaskMaster.create_tasks do
       end 
       monthly_schedule do
         months :october, :november
-        days 5, 10, 15, 25, 30
+        days_in_month 5, 10, 15, 25, 30
       end
     end
     
@@ -417,7 +417,7 @@ TaskMaster.create_tasks do
       end_boundary DateTime.new(2010, 6, 11, 12, 30)
       month_day_of_week_schedule do
         weeks 1, 2
-        days "Monday", "Wednesday", "Friday"
+        days_of_week "Monday", "Wednesday", "Friday"
         months "February", "July"
       end
     end
@@ -427,7 +427,7 @@ TaskMaster.create_tasks do
       end_boundary DateTime.new(2010, 6, 11, 12, 30)
       weekly_schedule do
         interval 4
-        days :monday
+        days_of_week :monday
       end
     end
   
@@ -456,13 +456,13 @@ TaskMaster.create_tasks do
     session_state_change_trigger do
       userid 1
       delay 20.minutes
-      state_change StateChange.console_connect
+      state_change TaskMaster::StateChange.console_connect
     end
   
     principal do
       groupid 1
       userid 2
-      logon_type LogonType.password
+      logon_type TaskMaster::LogonType.password
     end
   end
 end

@@ -2,9 +2,9 @@ require 'rubygems'
 require 'builder'
 require 'active_support'
 local_path = File.expand_path(File.dirname(__FILE__))
-['utility/duration', 'utility/date_helpers', 'idle_settings', 'base_settings', 'task_settings', 
+['utility/duration', 'utility/date_helpers', 'logon_type', 'idle_settings', 'base_settings', 'task_settings', 
   'network_settings', 'repetition','restart_on_failure_settings', 'multiple_instances_policy', 
-  'priority', 'logon_type', 'state_change', 'task_principal', 'actions/action', 'actions/com_action', 
+  'priority', 'state_change', 'task_principal', 'actions/action', 'actions/com_action', 
   'actions/exec_action', 'actions/email_action', 'actions/show_message_action', 'utility/calendar_helper',
   'triggers/trigger','triggers/boot_trigger', 'triggers/calendar_trigger', 'triggers/event_trigger', 
   'triggers/idle_trigger','triggers/logon_trigger', 'triggers/registration_trigger', 
@@ -13,7 +13,7 @@ local_path = File.expand_path(File.dirname(__FILE__))
   end
 
 module TaskMaster
-  
+    
   @@tasks = []
   
   def self.create_tasks(&block)

@@ -51,5 +51,28 @@ module TaskMaster
         MONTH_MAP[month.to_s.downcase.capitalize].call(builder)
       end
     end
+    
+    module Days
+      def days_of_week(*sched_days)
+        sched_days.each do |day|
+          unless CalendarHelper::DAYS_OF_WEEK.include?(day.to_s.downcase.capitalize)
+            raise "Invalid day of the week: #{day}. It must be one of #{CalendarHelper::DAYS_OF_WEEK.to_sentence}"
+          end
+          @days << day.to_s.downcase.capitalize
+        end
+      end
+    end
+    
+    module Months
+      def months(*month_names)
+        month_names.each do |month|
+          unless CalendarHelper::MONTHS.include?(month.to_s.downcase.capitalize)
+            raise "Invalid month name: #{month}. It must be one of #{CalendarHelper::MONTHS.to_sentence}"
+          end
+          @months << month.to_s.downcase.capitalize
+        end
+      end
+    end
+    
   end
 end

@@ -6,10 +6,10 @@ module TaskMaster
      "SessionLock", "SessionUnlock"].freeze
     
     def initialize(state)
-      unless STATE_CHANGES.include?(change.to_sym)
+      unless STATE_CHANGES.include?(state)
         raise "Invalid session state change specified: #{change}. Must be one of #{STATE_CHANGES.to_sentence}"
       end
-      @change = change
+      @change = state
     end
     
     def self.console_connect
