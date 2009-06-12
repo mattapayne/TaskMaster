@@ -1,6 +1,15 @@
 TaskMaster is a Ruby DSL for generating Windows Task Scheduler tasks as XML
 
-** Note that only Windows Vista and Server 2008 support creating scheduled tasks from XML **
+** Note: only Windows Vista (I think) and Server 2008 support creating scheduled tasks from XML **
+** Note: this library currently only generates the necessary XML. It does not yet support actual task creation.
+** Note: this is a very preliminary work. Use at your own risk. **
+
+TODO:
+=====
+1) Finish specs
+2) Create executables to automatically create the task(s) when running on Windows
+3) Add Rails integration support
+4) The interface needs a bit more polish
 
 Examples:
 =========
