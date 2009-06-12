@@ -299,7 +299,7 @@ TaskMaster.create_tasks do
       delete_expired_task_after 1.minutes
       disallow_start_if_on_batteries true
       enabled true
-      execution_time_limit 20
+      execution_time_limit 20.minutes
       run_only_if_idle false
       run_only_if_network_available false
       start_when_available true
@@ -468,4 +468,5 @@ TaskMaster.create_tasks do
   end
 end
 
-WinSched.to_xml(File.join(File.dirname(__FILE__), "output"))
+#Write all tasks as XML to the specified directory
+TaskMaster.to_xml(File.join(File.dirname(__FILE__), "output"))
