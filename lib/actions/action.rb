@@ -1,8 +1,6 @@
 module TaskMaster
   class Action
     
-    ACTION_TYPES = [:com, :exec, :email, :show_message].freeze
-        
     def id(action_id)
       @id = action_id
     end
@@ -21,21 +19,10 @@ module TaskMaster
     end
     
     def self.get(type)
-      if type.blank? || !ACTION_TYPES.include?(type.to_sym)
-        raise ArgumentError.new("Invalid action type: #{type}. Must be one of #{ACTION_TYPES.to_sentence}")
+      if type.blank? || !action_types.keys.include?(type.to_sym)
+        raise ArgumentError.new("Invalid action type: #{type}. Must be one of #{action_types.keys.to_sentence}")
       end
-      action = nil
-      case type.to_sym
-        when :exec
-          action = ExecAction.new
-        when :com
-          action = ComAction.new
-        when :show_message
-          action = ShowMessageAction.new
-        when :email
-          action = EmailAction.new
-      end
-      action
+      return action_types[type.to_sym].new
     end
     
     protected
@@ -46,6 +33,12 @@ module TaskMaster
     
     def id_attrs
       (@id && !@id.nil?) ? {:id => @id} : {}
+    end
+    
+    private
+    
+    def self.action_types
+      { :com => ComAction, :exec => ExecAction, :email => EmailAction, :show_message => ShowMessageAction }
     end
     
   end

@@ -17,11 +17,11 @@ module TaskMaster
   @@tasks = []
   
   def self.create_tasks(&block)
-     if block_given?
-       self.instance_eval(&block)
-     else
-       raise "You must supply a block to begin creating tasks."
-     end
+    if block_given?
+      self.instance_eval(&block)
+    else
+      raise "You must supply a block to begin creating tasks."
+    end
   end
   
   def self.task( &block)

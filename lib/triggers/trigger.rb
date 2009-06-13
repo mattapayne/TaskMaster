@@ -1,34 +1,12 @@
 module TaskMaster
   class Trigger
     include DateHelpers
-    
-    TRIGGER_TYPES = [:boot, :calendar, :event, :idle, :logon, :registration, :session_state_change, :time].freeze
-    
+  
     def self.get(type)
-      if type.blank? || !TRIGGER_TYPES.include?(type.to_sym)
-        raise "Invalid trigger type: #{type}. Must be one of #{TRIGGER_TYPES.to_sentence}"
+      if type.blank? || !trigger_types.keys.include?(type.to_sym)
+        raise "Invalid trigger type: #{type}. Must be one of #{trigger_types.keys.to_sentence}"
       end
-      type = type.to_sym
-      trigger = nil
-      case type
-        when :boot
-          trigger = BootTrigger.new
-        when :calendar
-          trigger = CalendarTrigger.new
-        when :event
-          trigger = EventTrigger.new
-        when :idle
-          trigger = IdleTrigger.new
-        when :logon
-          trigger = LogonTrigger.new
-        when :registration
-          trigger = RegistrationTrigger.new
-        when :session_state_change
-          trigger = SessionStateChangeTrigger.new
-        when :time
-          trigger = TimeTrigger.new
-      end
-      trigger
+      return trigger_types[type.to_sym].new
     end
     
     #default value - override in derived classes
@@ -67,6 +45,14 @@ module TaskMaster
         @repetition.to_xml(builder)
       end
       builder.ExecutionTimeLimit @exec_time_limit.to_s if @exec_time_limit
+    end
+    
+    private
+    
+    def self.trigger_types
+      { :boot => BootTrigger, :calendar => CalendarTrigger, :event => EventTrigger, 
+        :idle => IdleTrigger, :logon => LogonTrigger, :registration => RegistrationTrigger, 
+        :session_state_change => SessionStateChangeTrigger, :time => TimeTrigger }
     end
     
   end

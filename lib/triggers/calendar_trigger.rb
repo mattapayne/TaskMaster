@@ -3,24 +3,16 @@ module TaskMaster
     
     class ScheduleFactory
       
-      SCHEDULE_TYPES = [:weekly, :daily, :monthly, :monthdayofweek].freeze
-      
       def self.get(type)
-        if type.nil? || !SCHEDULE_TYPES.include?(type.to_sym)
-          raise "Invalid schedule type: #{type}. Must be one of #{SCHEDULE_TYPES.to_sentence}"
+        if type.nil? || !schedule_types.keys.include?(type.to_sym)
+          raise "Invalid schedule type: #{type}. Must be one of #{schedule_types.keys.to_sentence}"
         end
-        schedule = nil
-        case type
-          when :daily
-            schedule = ScheduleByDay.new
-          when :weekly
-            schedule = ScheduleByWeek.new
-          when :monthly
-            schedule = ScheduleByMonth.new
-          when :monthdayofweek
-            schedule = ScheduleByMonthDayOfWeek.new
-        end
-        schedule
+        return schedule_types[type.to_sym].new
+      end
+      
+      def self.schedule_types
+        {:weekly => ScheduleByWeek, :daily => ScheduleByDay, 
+          :monthly => ScheduleByMonth, :monthdayofweek => ScheduleByMonthDayOfWeek}
       end
       
     end
@@ -28,11 +20,10 @@ module TaskMaster
     class ScheduleByDay
       
       def interval(interval)
-        if interval.to_i <= CalendarHelper::MAX_DAYS_IN_YEAR && 
-          interval.to_i >= CalendarHelper::MIN_DAYS_IN_YEAR
+        if CalendarHelper::DAYS_IN_YEAR.include?(interval.to_i)
           @days_interval = interval
         else
-          raise "Invalid day interval: #{interval}. Must be between #{CalendarHelper::MIN_DAYS_IN_YEAR} and #{CalendarHelper::MAX_DAYS_PER_YEAR}"
+          raise "Invalid day interval: #{interval}. Must be in the range of #{CalendarHelper::DAYS_IN_YEAR}"
         end
       end
       
@@ -56,11 +47,10 @@ module TaskMaster
       end
       
       def interval(interval)
-        if interval.to_i <= CalendarHelper::MAX_WEEKS_IN_YEAR && 
-          interval.to_i >= CalendarHelper::MIN_WEEKS_IN_YEAR
+        if CalendarHelper::WEEKS_IN_YEAR.include?(interval.to_i)
            @weeks_interval = interval
          else
-           raise "Invalid week interval: #{interval}. Must be between #{CalendarHelper::MIN_WEEKS_IN_YEAR} and #{CalendarHelper::MAX_WEEKS_IN_YEAR}"
+           raise "Invalid week interval: #{interval}. Must be in the range of #{CalendarHelper::WEEKS_IN_YEAR}"
          end
       end
       
@@ -93,9 +83,8 @@ module TaskMaster
       
       def days_of_month(*day_numbers)
         day_numbers.each do |day|
-          unless day.to_i >= CalendarHelper::MIN_DAYS_IN_MONTH && 
-            day.to_i <= CalendarHelper::MAX_DAYS_IN_MONTH
-            raise "Invalid day number: #{day}. It must be between #{CalendarHelper::MIN_DAYS_IN_MONTH} and #{CalendarHelper::MAX_DAYS_IN_MONTH}"
+          unless CalendarHelper::DAYS_IN_MONTH.include?(day.to_i)
+            raise "Invalid day number: #{day}. It must be in the range of #{CalendarHelper::DAYS_IN_MONTH}"
           end
           if @days.size < CalendarHelper::MAX_ALLOWABLE_DAYS_IN_MONTH
             @days << day.to_i
@@ -139,9 +128,8 @@ module TaskMaster
       
       def weeks(*week_numbers)
         week_numbers.each do |week|
-          unless week.to_i >= CalendarHelper::MIN_WEEKS_IN_YEAR && 
-            week.to_i <= CalendarHelper::MAX_WEEKS_IN_YEAR
-            raise "Invalid week number. Must be between #{CalendarHelper::MIN_WEEKS_IN_YEAR} and #{CalendarHelper::MAX_WEEKS_IN_YEAR}"
+          unless CalendarHelper::WEEKS_IN_YEAR.include?(week.to_i)
+            raise "Invalid week number. Must be in the range of #{CalendarHelper::WEEKS_IN_YEAR}"
           end
           @weeks << week.to_i
         end

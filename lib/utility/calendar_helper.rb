@@ -1,16 +1,10 @@
 module TaskMaster
   module CalendarHelper
     
-    MAX_DAYS_IN_YEAR = 365
-    MIN_DAYS_IN_YEAR = 1
-    
-    MAX_WEEKS_IN_YEAR = 52
-    MIN_WEEKS_IN_YEAR = 1
-    
-    MAX_DAYS_IN_MONTH = 32
-    MIN_DAYS_IN_MONTH = 1
-    
-    MAX_ALLOWABLE_DAYS_IN_MONTH = 32
+    DAYS_IN_YEAR = 1..365
+    WEEKS_IN_YEAR = 1..52
+    DAYS_IN_MONTH = 1..31
+    MAX_ALLOWABLE_DAYS_IN_MONTH = 31
         
     DAY_MAP = {
       "Monday" => lambda {|b| b.Monday},

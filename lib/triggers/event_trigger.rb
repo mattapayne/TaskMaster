@@ -14,7 +14,8 @@ module TaskMaster
       end
       
       def to_xml(builder)
-        builder.Value(@value, :name => @name) if @value
+        name_hash = @name.blank? ? nil : {:name => @name}
+        builder.Value(@value, name_hash) if @value
       end
       
       def valid?

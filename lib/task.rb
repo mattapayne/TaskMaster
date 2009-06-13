@@ -85,19 +85,17 @@ module TaskMaster
     end
     
     def action(type = :exec, &block)
-      if block_given?
-        unless @actions.size >= MAX_ACTIONS
-          action = Action.get(type)
+      unless @actions.size >= MAX_ACTIONS
+        action = Action.get(type)
+        if block_given?
           action.instance_eval(&block)
-          unless action.valid?
-            raise "Invalid action"
-          end
-          @actions << action
-        else
-          raise "You may only have a maximum of #{MAX_ACTIONS} actions."
         end
+        unless action.valid?
+          raise "Invalid action"
+        end
+        @actions << action
       else
-        raise "You must provide a block to configure the action."
+        raise "You may only have a maximum of #{MAX_ACTIONS} actions."
       end
     end
     
