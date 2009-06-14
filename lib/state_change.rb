@@ -6,8 +6,8 @@ module TaskMaster
      "SessionLock", "SessionUnlock"].freeze
     
     def initialize(state)
-      unless STATE_CHANGES.include?(state)
-        raise "Invalid session state change specified: #{change}. Must be one of #{STATE_CHANGES.to_sentence}"
+      unless STATE_CHANGES.include?(state.to_s)
+        raise ArgumentError.new("Invalid session state change specified: #{state}. Must be one of #{STATE_CHANGES.to_sentence}")
       end
       @change = state
     end
