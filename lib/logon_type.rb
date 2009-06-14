@@ -5,7 +5,7 @@ module TaskMaster
     
     def initialize(type)
       unless LOGON_TYPES.include?(type.to_s)
-        raise "Invalid logon type: #{type}. Must be one of #{LOGON_TYPES.to_sentence}"
+        raise ArgumentError.new("Invalid logon type: #{type}. Must be one of #{LOGON_TYPES.to_sentence}")
       end
       @type = type
     end
