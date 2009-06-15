@@ -35,8 +35,10 @@ module TaskMaster
   end
   
   def self.to_xml(output_path=".")
+    b = Builder::XmlMarkup.new(:index => 1)
+    b.instruct!(:xml, :encoding => nil)
     @@tasks.each do |t|
-      xml = t.to_xml
+      xml = t.to_xml(b)
       File.open(File.join(output_path, "#{t.file_name}.xml"), 'w') { |f| f.write(xml) }
     end
   end

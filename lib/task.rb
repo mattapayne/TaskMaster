@@ -5,6 +5,14 @@ module TaskMaster
     MAX_ACTIONS = 32
     MAX_TRIGGERS = 48
     
+    class MaxActionsReachedException < RuntimeError; end
+    
+    class MaxTriggersReachedException < RuntimeError; end
+    
+    class InvalidActionException < RuntimeError; end
+    
+    class InvalidTriggerException < RuntimeError; end
+    
     def initialize
       @actions = []
       @triggers = []
@@ -14,40 +22,40 @@ module TaskMaster
       @filename
     end
     
-    def name(name)
-      @filename = name
+    def name(task_name)
+      @filename = task_name
     end
     
-    def description(descr)
-      @description = descr
+    def description(task_descr)
+      @description = task_descr
     end
     
-    def date(date)
-      @date = convert_date(date)
+    def date(task_date)
+      @date = convert_date(task_date)
     end
     
-    def author(author)
-      @author = author
+    def author(task_author)
+      @author = task_author
     end
     
-    def version(version)
-      @version = version
+    def version(task_version)
+      @version = task_version
     end
     
-    def documentation(doc)
-      @documentation = doc
+    def documentation(task_doc)
+      @documentation = task_doc
     end
     
     def security_descriptor(security_desc)
       @security_descriptor = security_desc
     end
     
-    def source(source)
-      @source = source
+    def source(task_source)
+      @source = task_source
     end
     
-    def uri(value)
-      @uri = value
+    def uri(task_uri)
+      @uri = task_uri
     end
     
     def data(task_data)
@@ -91,11 +99,11 @@ module TaskMaster
           action.instance_eval(&block)
         end
         unless action.valid?
-          raise "Invalid action"
+          raise InvalidActionException.new("Invalid action: #{action.class.name}")
         end
         @actions << action
       else
-        raise "You may only have a maximum of #{MAX_ACTIONS} actions."
+        raise MaxActionsReachedException.new("You may only have a maximum of #{MAX_ACTIONS} actions.")
       end
     end
     
@@ -138,17 +146,15 @@ module TaskMaster
           trigger.instance_eval(&block)
         end
         unless trigger.valid?
-          raise "Invalid trigger"
+          raise InvalidTriggerException.new("Invalid trigger: #{trigger.class.name}")
         end
         @triggers << trigger
       else
-        raise "You may only have a maximum of #{MAX_TRIGGERS} triggers."
+        raise MaxTriggersReachedException.new("You may only have a maximum of #{MAX_TRIGGERS} triggers.")
       end
     end
     
-    def to_xml
-      b = Builder::XmlMarkup.new(:index => 1)
-      b.instruct!(:xml, :encoding => nil)
+    def to_xml(b)
       b.Task(:xmlns => "http://schemas.microsoft.com/windows/2004/02/mit/task") do
         b.RegistrationInfo do
           b.Date @date if @date
