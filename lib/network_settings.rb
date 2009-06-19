@@ -1,5 +1,5 @@
 module TaskMaster
-  class NetworkSettings < BaseSettings
+  class NetworkSettings
     
     def id(ns_id)
       @id = ns_id
@@ -11,7 +11,6 @@ module TaskMaster
     
     def to_xml(builder)
       builder.NetworkSettings do
-        super(builder)
         builder.Id @id if @id
         builder.Name @name if @name
       end

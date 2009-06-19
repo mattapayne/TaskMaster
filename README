@@ -10,6 +10,10 @@ TODO:
 2) Create executables to automatically create the task(s) when running on Windows
 3) Add Rails integration support
 
+Known Issues:
+=============
+Task Settings: NetworkProfileName appears to be invalid, even though it is a part of the settingsType schema.
+
 Examples:
 =========
 
