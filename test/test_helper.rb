@@ -4,7 +4,7 @@ require 'test/unit'
 begin
   require 'shoulda'
 rescue LoadError
-  warn "To test WinSched you need the shoulda gem"
+  warn "To test TaskMaster you need the shoulda gem"
   warn "$ sudo gem install thoughtbot-shoulda"
   exit(1)
 end
@@ -12,7 +12,7 @@ end
 begin
   require 'mocha'
 rescue LoadError
-  warn "To test WinSched you need the mocha gem"
+  warn "To test TaskMaster you need the mocha gem"
   warn "$ sudo gem install mocha"
   exit(1)
 end
