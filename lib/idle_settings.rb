@@ -19,7 +19,7 @@ module TaskMaster
     
     def to_xml(builder)
       builder.IdleSettings do
-        builder.WaitTimeout @wait_timeout.to_s if @waittimeout
+        builder.WaitTimeout @wait_timeout.to_s if @wait_timeout
         builder.Duration @duration.to_s if @duration
         builder.TerminateOnIdleEnd @terminate_on_idle_end if @terminate_on_idle_end
         builder.RestartOnIdle @restart_on_idle if @restart_on_idle
